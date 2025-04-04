@@ -1,7 +1,8 @@
 /********************************************************************************************************
  * File:  Physician.java Course Materials CST 8277
  *
- * @author Teddy Yap
+ * @author Teddy Yap, 
+ * @author Suhas Udayakumar, Tanek Stuttgraham, Sukhpreet Singh
  * 
  */
 package acmemedical.entity;
@@ -10,6 +11,13 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
 /**
  * The persistent class for the physician database table.
  */
@@ -17,6 +25,8 @@ import java.util.Set;
 
 //TODO PH01 - Add the missing annotations.
 //TODO PH02 - Do we need a mapped super class? If so, which one?
+@Entity
+@Table(name = "physician")
 public class Physician extends PojoBase implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -25,16 +35,20 @@ public class Physician extends PojoBase implements Serializable {
     }
 
 	// TODO PH03 - Add annotations.
+    @Column(name = "first_name")
 	private String firstName;
 
 	// TODO PH04 - Add annotations.
+    @Column(name = "last_name")
 	private String lastName;
 
 	// TODO PH05 - Add annotations for 1:M relation.  What should be the cascade and fetch types?
-	private Set<MedicalCertificate> medicalCertificates = new HashSet<>();
+    @OneToMany(mappedBy = "physician", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<MedicalCertificate> medicalCertificates = new HashSet<>();
 
 	// TODO PH06 - Add annotations for 1:M relation.  What should be the cascade and fetch types?
-	private Set<Prescription> prescriptions = new HashSet<>();
+    @OneToMany(mappedBy = "physician", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Prescription> prescriptions = new HashSet<>();
 
 	public String getFirstName() {
 		return firstName;

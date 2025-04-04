@@ -3,7 +3,7 @@
  *
  * @author Teddy Yap
  * @author Shariar (Shawn) Emami
- * 
+ * @author Suhas Udayakumar, Tanek Stuttgraham, Sukhpreet Singh
  */
 package acmemedical.entity;
 

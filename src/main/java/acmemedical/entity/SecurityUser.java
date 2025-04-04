@@ -3,7 +3,7 @@
  *
  * @author Teddy Yap
  * @author Shariar (Shawn) Emami
- * 
+ * @author Suhas Udayakumar, Tanek Stuttgraham, Sukhpreet Singh
  */
 package acmemedical.entity;
 
@@ -13,6 +13,19 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 @SuppressWarnings("unused")
 
 /**
@@ -20,23 +33,34 @@ import java.util.Set;
  */
 
 //TODO SU01 - Make this into JPA entity and add all the necessary annotations inside the class.
+@Entity
+@Table(name = "SECURITY_USER")
 public class SecurityUser implements Serializable, Principal {
     /** Explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
 
     //TODO SU02 - Add annotations.
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     protected int id;
     
     //TODO SU03 - Add annotations.
+    @Column(name = "username")
     protected String username;
     
     //TODO SU04 - Add annotations.
+    @Column(name = "password_hash")
     protected String pwHash;
     
     //TODO SU05 - Add annotations.
+    @ManyToOne
+    @JoinColumn(name = "physician_id", referencedColumnName = "id")
     protected Physician physician;
     
     //TODO SU06 - Add annotations.
+    @JsonBackReference
+    @ManyToMany(mappedBy = "users", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     protected Set<SecurityRole> roles = new HashSet<SecurityRole>();
 
     public SecurityUser() {

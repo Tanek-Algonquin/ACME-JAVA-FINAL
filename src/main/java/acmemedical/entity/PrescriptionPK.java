@@ -1,9 +1,9 @@
-/********************************************************************************************************
+/*/*******************************************************************************************************
  * File:  PrescriptionPK.java Course Materials CST 8277
  *
  * @author Teddy Yap
- * 
- */
+ * @author Suhas Udayakumar, Tanek Stuttgraham, Sukhpreet Singh
+ **/
 package acmemedical.entity;
 
 import java.io.Serializable;
@@ -21,6 +21,7 @@ import jakarta.persistence.Embeddable;
  */
 //TODO PRPK01 - What annotation is used to define an object which can be embedded in other entities?
 //Hint - @Access is used to establish where the annotation for JPA will be placed, field or properties. 
+@Embeddable
 @Access(AccessType.FIELD)
 public class PrescriptionPK implements Serializable {
 	// Default serial version id, required for serializable classes.

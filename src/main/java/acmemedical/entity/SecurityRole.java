@@ -3,7 +3,7 @@
  *
  * @author Teddy Yap
  * @author Shariar (Shawn) Emami
- * 
+ * @author Suhas Udayakumar, Tanek Stuttgraham, Sukhpreet Singh
  */
 package acmemedical.entity;
 
@@ -12,23 +12,39 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+
 @SuppressWarnings("unused")
 
 /**
  * Role class used for (JSR-375) Jakarta EE Security authorization/authentication
  */
 //TODO SR01 - Make this into JPA entity and add all necessary annotations inside the class.
+@Entity
+@Table(name = "SECURITY_ROLE")
 public class SecurityRole implements Serializable {
     /** Explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
 
     //TODO SR02 - Add annotations.
+    @Column(name = "ROLE_ID")
     protected int id;
     
     //TODO SR03 - Add annotations.
+    @Column(name = "ROLE_NAME")
     protected String roleName;
     
     //TODO SR04 - Add annotations.
+    @ManyToMany
+    @JoinTable(
+        name = "USER_HAS_ROLE",
+        joinColumns = @JoinColumn(name = "ROLE_ID"),
+        inverseJoinColumns = @JoinColumn(name = "USER_ID")
+    )
     protected Set<SecurityUser> users = new HashSet<SecurityUser>();
 
     public SecurityRole() {
