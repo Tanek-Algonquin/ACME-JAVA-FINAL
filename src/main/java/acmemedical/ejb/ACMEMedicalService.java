@@ -20,7 +20,6 @@ import static acmemedical.utility.MyConstants.PROPERTY_KEY_SIZE;
 import static acmemedical.utility.MyConstants.PROPERTY_SALT_SIZE;
 import static acmemedical.utility.MyConstants.PU_NAME;
 import static acmemedical.utility.MyConstants.USER_ROLE;
-import static acmemedical.entity.Physician.ALL_PHYSICIANS_QUERY_NAME;
 import static acmemedical.entity.MedicalSchool.ALL_MEDICAL_SCHOOLS_QUERY_NAME;
 import static acmemedical.entity.MedicalSchool.IS_DUPLICATE_QUERY_NAME;
 import static acmemedical.entity.MedicalSchool.SPECIFIC_MEDICAL_SCHOOL_QUERY_NAME;
@@ -106,7 +105,17 @@ public class ACMEMedicalService implements Serializable {
         String pwHash = pbAndjPasswordHash.generate(DEFAULT_USER_PASSWORD.toCharArray());
         userForNewPhysician.setPwHash(pwHash);
         userForNewPhysician.setPhysician(newPhysician);
-        SecurityRole userRole = /* TODO ACMECS01 - Use NamedQuery on SecurityRole to find USER_ROLE */ null;
+        //
+        TypedQuery<SecurityRole> query = em.createNamedQuery("SecurityRole.userRoleByName", SecurityRole.class); 
+        query.setParameter("param1", "USER_ROLE");
+        SecurityRole userRole = null; /* TODO ACMECS01 - Use NamedQuery on SecurityRole to find USER_ROLE */ 
+
+        try {
+            userRole = query.getSingleResult();
+        } catch (Exception e) {
+            LOG.error("caught exception attempting to get SecurityUser by name", e);
+        }
+        //
         userForNewPhysician.getRoles().add(userRole);
         userRole.getUsers().add(userForNewPhysician);
         em.persist(userForNewPhysician);
@@ -165,11 +174,9 @@ public class ACMEMedicalService implements Serializable {
         Physician physician = getPhysicianById(id);
         if (physician != null) {
             em.refresh(physician);
-            TypedQuery<SecurityUser> findUser = 
-            /* TODO ACMECS02 - Use NamedQuery on SecurityRole to find this related Student
-               so that when we remove it, the relationship from SECURITY_USER table
-               is not dangling
-            */ null;
+            TypedQuery<SecurityUser> findUser = em.createNamedQuery("SecurityUser.findByPhysicianId", SecurityUser.class)
+                    .setParameter("physicianId", id);
+
             SecurityUser sUser = findUser.getSingleResult();
             em.remove(sUser);
             em.remove(physician);
