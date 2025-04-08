@@ -92,6 +92,7 @@ public class SecurityUser implements Serializable, Principal {
     }
 
     // TODO SU07 - Setup custom JSON serializer
+    @JsonSerialize(using = SecurityRoleSerializer.class)
     public Set<SecurityRole> getRoles() {
         return roles;
     }
