@@ -1,6 +1,5 @@
 /********************************************************************************************************
  * File:  SecurityUser.java Course Materials CST 8277
- *
  * @author Teddy Yap
  * @author Shariar (Shawn) Emami
  * @author Suhas Udayakumar, Tanek Stuttgraham, Sukhpreet Singh
